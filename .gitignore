@@ -1,0 +1,9 @@
+# virtual environment
+virtualenv/
+
+#sqlite
+*.sqlite3 
+
+__pycache__
+
+notes.txt
