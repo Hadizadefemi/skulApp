@@ -2,8 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+
+    
+
 class Class(models.Model):
     class_name = models.CharField(max_length=30)
+    # subjects = models.ManyToManyField(Subject)
     
     def __str__(self):
         return self.class_name
@@ -28,6 +32,9 @@ class Student(models.Model):
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
     
+    class Meta:
+        ordering = ['first_name', 'last_name']
+    
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -35,17 +42,11 @@ class Teacher(models.Model):
     
     def __str__(self):
         return f'{self.user}'
+    
 
 
 class Attendance(models.Model):
-    ATTENDANCE_CHOICE = (
-        ('A', 'Absent'),
-        ('P', 'Present'),
-    )
-    
-    student = models.ForeignKey(Student, models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    # teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, default=None)
     date = models.DateField()
-    status = models.CharField(max_length=1, choices=ATTENDANCE_CHOICE)
-    
-    def __str__(self):
-        return f"{self.student} - {self.get_status_display()} - {self.date}"
+    is_present = models.BooleanField(default=False)
